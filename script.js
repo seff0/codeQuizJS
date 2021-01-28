@@ -53,12 +53,15 @@ var questions = [
     correct: "choice3",
   }),
 ];
-
+//this function displays questions one by one as determined by variable j
 function displayQuestion() {
+  //clear the divs we need
   answersDiv.textContent = "";
   questionDiv.textContent = "";
+  //select a question to present
   var questionSelected = questions[j];
   questionDiv.textContent = questionSelected.question;
+  //loop through the possible choices for each question. loop will create buttons from each choice and event listeners to determine right/wrong answers
   for (i = 1; i < 5; i++) {
     var option = Object.values(questionSelected);
     var optionKey = Object.keys(questionSelected);
@@ -71,9 +74,12 @@ function displayQuestion() {
     answersDiv.append(button);
     button.addEventListener("click", function (event) {
       var userAnswer = event.target.id;
+      // if correct, user moves on
       if (userAnswer == correctOption) {
         nextQuestion();
-      } else {
+      }
+      // if incorrect, subtract 5 seconds and move on
+      else {
         timer -= 5;
         nextQuestion();
       }
@@ -81,6 +87,7 @@ function displayQuestion() {
   }
 }
 
+//this function increments the j variable, then displays the next question. when j >4, we are out of questions and can move to the final function
 function nextQuestion() {
   if (j < 4) {
     j++;
@@ -90,6 +97,7 @@ function nextQuestion() {
   }
 }
 
+//this function handles the timer
 function startTimer() {
   var timerInterval = setInterval(function () {
     timerEl.textContent = timer;
@@ -102,6 +110,7 @@ function startTimer() {
   }, 1000);
 }
 
+//this is the last function to run. this shows the user their score and prompts them to save it to local storage
 function displayResults() {
   timerEl.textContent = "";
   var timeRemaining = timer;
@@ -113,11 +122,13 @@ function displayResults() {
   localStorage.setItem("score", initials + "-" + score);
 }
 
+//hiscores button will alert the user with the currently saved score
 hiscores.addEventListener("click", function () {
   scores = localStorage.getItem("score");
   alert(scores);
 });
 
+//when user clicks start, this listener starts the timer and displays the first question
 start.addEventListener("click", function () {
   startTimer();
   displayQuestion();
